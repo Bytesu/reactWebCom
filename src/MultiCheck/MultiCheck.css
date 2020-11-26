@@ -1,3 +1,39 @@
-/* TODO */
+/* multi-check css */
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex1 {
+    flex: 1;
+}
+
 .MultiCheck {
+    display: inline-block;
+    border: 1px solid #e3e3e3;
+    padding: 2px;
+    background: #fff;
+    min-width: 300px;
+    max-width: 500px;
+    overflow: auto;
+    background: #F2F2F5;
+    border-radius: 3px;
+}
+
+.MultiCheck .checkbox-item {
+    max-width: 150px;
+}
+
+.MultiCheck .title {
+    background: #eee;
+    padding: 5px 10px;
+}
+
+.MultiCheck .content {
+    background: #fff;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #D6D6D7;
+    border-radius: 3px;
 }
