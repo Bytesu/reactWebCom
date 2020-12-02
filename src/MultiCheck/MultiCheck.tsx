@@ -44,9 +44,12 @@ interface LooseObject {
 }
 
 const MultiCheck: React.FunctionComponent<Props> = (props): JSX.Element => {
-    let tmp: LooseObject = {}, values: string[] = props.values || [];
+    let
+        tmpArr:string[] = [],
+        tmp: LooseObject = {}, values: string[] = props.values || [];
     values.map(item => {
         tmp[item] = true;
+        tmpArr.push(item.value);
     })
     let column = props.columns || 1;
     if (column < 1) {
@@ -55,35 +58,42 @@ const MultiCheck: React.FunctionComponent<Props> = (props): JSX.Element => {
     const [items, setItems] = useState<Option[]>(props.options);
     const [selectAll, setSelectAll] = useState<boolean>(values.length == props.options.length);
 
-    const [selectedVal, setSelectedVal] = useState<LooseObject>(tmp);
-
+    const [selectedVal, setSelectedVal] = useState<LooseObject>(tmp);                               //@Object
+    // const [selectedArrVal, setSelectedArrVal] = useState<string[]>(tmpArr);                      //@Arry
+    const allCheckVal = '-1';
     //checkbox item change callback
     function onMultiCheckOptionChange(e: CheckboxChangeArgType): void {
-        let {checked, value, index} = e, obj: LooseObject = {};
-        if (index == '-1') { // un/select all
+        let {checked, value, index} = e, obj: LooseObject = {},resArr = [];
+        if (index == allCheckVal) { // un/select all
             if (checked)
                 items.forEach(item => {
                     obj[item.value] = checked;
+                    // resArr.push(item.value);
                 })
             else {
                 obj = {};
             }
         } else {
-            let tmp: LooseObject = {...selectedVal}
+            const tmp: LooseObject = {...selectedVal}, tmpArr = [...selectedArrVal]
             if (checked) {
-                obj[value] = checked;
+                obj[value] = checked;                                                              //@Object
+                // resArr.push(value);                                                             //@Arry
             } else {
-                delete tmp[value];
+                delete tmp[value];//                                                               //@Object
+                //  selectedArrVal = selectedArrVal.fillter(val=>val!=value);                      //@Arry
+                // remove value from tmpArr, this statment is complex compare with the below line ,because it`s a  iterator  judage
             }
             obj = Object.assign({}, tmp, obj)
+            resArr = tmpArr.concat(tmp);
         }
-        let len: number = Object.keys(obj).length;
-        if (len == items.length) {
+        let len: number = Object.keys(obj).length; // this line is complex comparing with using object //@Object
+        if (len == items.length) {               //resArr.length==items.length                         //@Object\@Arry
             !selectAll && setSelectAll(!selectAll)
         } else {
             selectAll && setSelectAll(!selectAll)
         }
-        setSelectedVal(obj);
+        setSelectedVal(obj);                    //@Object
+        // setSelectedArrVal(resArr);           //@Arry
         props.onChange && props.onChange(items.filter(item => obj[item.value]));
     }
 
@@ -95,8 +105,8 @@ const MultiCheck: React.FunctionComponent<Props> = (props): JSX.Element => {
             <MultiCheckOption
                 className='select-all-input'
                 label="Select all"
-                index="-1"
-                value="-1"
+                index={allCheckVal}
+                value={allCheckVal}
                 checked={selectAll}
                 onChange={onMultiCheckOptionChange}
             ></MultiCheckOption>
@@ -122,6 +132,7 @@ const MultiCheck: React.FunctionComponent<Props> = (props): JSX.Element => {
                                                 value={opt.value}
                                                 label={opt.label}
                                                 checked={!!selectedVal[opt.value]}
+                                                // checked={selectedArrVal.indexOf(opt.value)>-1}
                                                 onChange={onMultiCheckOptionChange}
                                             ></MultiCheckOption> : null
                                         }
