@@ -1,13 +1,20 @@
 {
   "compilerOptions": {
-    "strict": true,
+    "strict": false,
     "target": "es6",
     "module": "commonjs",
     "jsx": "react",
     "esModuleInterop": true,
+    "importHelpers": true,//123
+    "sourceMap": true,
     "allowSyntheticDefaultImports": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/**/*.js",
+    "src/**/*.jsx"
+  ],
+  "include": [
+    "src/**/*.tsx"
   ]
 }
